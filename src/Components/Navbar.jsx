@@ -1,28 +1,50 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { AuthContext } from "../Provider/AuthProvider";
 
 const Navbar = () => {
+ 
+  const {user,logOut}=useContext(AuthContext);
+
+  const [email, setEmail] = useState(null);
+
+  // Update email when user is available
+  useEffect(() => {
+    if (user) {
+      setEmail(user.email);
+    }
+  }, [user]); 
+
+ const handleSignOut=()=>{
+   logOut()
+   .then(() => {
+    console.log("Logged out successfully");
+   
+  })
+   .catch(err=>console.log(err))
+ }
+//  console.log(email)
   const link = (
     <>
       <li>
-        <Link  className="font-bold" to="/home">
+        <NavLink className={({ isActive }) => (isActive ? 'text-blue-500 font-bold' : 'text-[#706F6F]')}  to="/">
          Home
-        </Link>
+        </NavLink>
         
       </li>
       <li>
-        <a className="font-bold">Tourists Spots</a>
+        <NavLink  to='/allTouristSpots/All'  className={({ isActive }) => (isActive ? 'text-blue-500 font-bold' : 'text-[#706F6F]')}>Tourists Spots</NavLink>
       </li>
       <li>
-        <a className="font-bold">Add Tourist Spot</a>
+        <NavLink to="/addTouristSpot"  className={({ isActive }) => (isActive ? 'text-blue-500 font-bold' : 'text-[#706F6F]')}>Add Tourist Spot</NavLink>
       </li>
       <li>
-        <a className="font-bold">My List</a>
+        <NavLink to={`/myList/${email}`}  className={({ isActive }) => (isActive ? 'text-blue-500 font-bold' : 'text-[#706F6F]')}>My List</NavLink>
       </li>
     </>
   );
   return (
-    <div className="navbar bg-base-100 shadow-sm mx-auto b">
+    <div className="fixed top-0 z-50  navbar bg-base-100 shadow-sm mx-auto b">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -50,7 +72,7 @@ const Navbar = () => {
           </ul>
         </div>
 
-        <Link className=" text-blue-400 font-bold text-2xl font-Lobster ms-8">
+        <Link to="/" className=" text-blue-400 font-bold text-2xl font-Lobster ms-8">
           Tourist Hub
         </Link>
       </div>
@@ -58,7 +80,8 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1">{link}</ul>
       </div>
       <div className="navbar-end ">
-        <div className="dropdown dropdown-end space-x-4">
+         {
+          user?  <div className="dropdown dropdown-end space-x-4">
           <div
             tabIndex={0}
             role="button"
@@ -77,21 +100,25 @@ const Navbar = () => {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
             <li>
-              <a className="justify-between">
-                Profile
-                <span className="badge">New</span>
+              <a className="justify-between text-blue-400 uppercase font-bold">
+                {
+                  user?.displayName ?? 'user'
+                }
+               
               </a>
             </li>
+             <hr />
             <li>
               <a>Settings</a>
             </li>
             <li>
-              <a>Logout</a>
+              <Link onClick={handleSignOut}>Logout</Link>
             </li>
           </ul>
-        </div>
-        <Link className="btn " to="/register">Register</Link>
-        <Link className="btn btn-outline btn-info" to="/login">LogIn</Link>
+        </div>: <div><Link className="btn " to="/register">Register</Link>
+        <Link className="btn btn-outline btn-info ms-3" to="/login">LogIn</Link></div>
+         }
+        
       </div>
      
     </div>

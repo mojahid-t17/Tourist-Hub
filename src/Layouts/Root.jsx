@@ -5,10 +5,12 @@ import Navbar from "../Components/Navbar";
 
 const Root = () => {
     return (
-        <div>
+        <div className="relative">
             <Navbar></Navbar>
-            <Outlet></Outlet>
-            <Footer></Footer>
+            <div className="pt-16"> {/* Adjust this value based on the navbar height */}
+                <Outlet />
+            </div>
+            <Footer />
         </div>
     );
 };

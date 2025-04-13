@@ -11,6 +11,7 @@ import 'swiper/css/pagination';
 import { Autoplay, EffectCoverflow, Pagination } from 'swiper/modules';
 
 // Import the images
+import { Link } from 'react-router-dom';
 import bangladesh1 from "/images/bangladesh/bangladesh (1).jpg";
 import combodia3 from "/images/combodia/combodia (3).jpg";
 import indonesia4 from "/images/indonesia/indonesia (4).jpg";
@@ -46,7 +47,6 @@ export default function CoverFlow() {
     <div className="flex justify-center items-center">
       
       <Swiper
-      
         effect={'coverflow'}
         grabCursor={true}
         centeredSlides={true}
@@ -71,12 +71,15 @@ export default function CoverFlow() {
         onSwiper={setSwiperInstance}
       >
         {countries.map((country) => (
+          
         <SwiperSlide
+       
           className="max-w-xs mb-8"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <img
+         <Link  to={`/allTouristSpots/${country.name}`}>
+         <img
             className="object-cover w-full h-full rounded-lg max-h-98"
             src={country.image}
             alt="Ahsan Manzil"
@@ -85,6 +88,7 @@ export default function CoverFlow() {
                 <h2>{country.name}</h2>
                 <button></button>
               </div>
+         </Link>
         </SwiperSlide>
        
         ))}
